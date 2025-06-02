@@ -44,6 +44,19 @@ class CreateTodoTest extends TestCase
         $response->assertSessionHasErrors(['title' => $error]);
     }
 
+    #[DataProvider('description_validation_provider')]
+    public function test_description_validation_rules(array $input, string $error)
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $response = $this->post(route('todos.store', [
+            'title' => 'title for creating todo',
+            'description' => $input['description'],
+        ]));
+
+        $response->assertSessionHasErrors(['description' => $error]);
+    }
+
     public static function title_validation_provider(): array
     {
         return [
@@ -58,6 +71,20 @@ class CreateTodoTest extends TestCase
             'long title' => [
                 'input' => ['title' => str_repeat('a', 256)],
                 'error' => 'The title field must not be greater than 255 characters.',
+            ],
+        ];
+    }
+
+    public static function description_validation_provider(): array
+    {
+        return [
+            'short description' => [
+                'input' => ['description' => 'aa'],
+                'error' => 'The description field must be at least 3 characters.',
+            ],
+            'long description' => [
+                'input' => ['description' => str_repeat('a', 256)],
+                'error' => 'The description field must not be greater than 255 characters.',
             ],
         ];
     }
