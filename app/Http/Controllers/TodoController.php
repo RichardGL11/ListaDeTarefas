@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\TodoStatusEnum;
 use App\Http\Requests\StoreTodoRequest;
+use App\Http\Requests\UpdateTodoRequest;
 use App\Models\Todo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -61,9 +62,14 @@ class TodoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateTodoRequest $request, Todo $todo): RedirectResponse
     {
-        //
+        $todo->update([
+            'title' => $request->validated('title'),
+            'description' => $request->validated('description'),
+            'status' => $request->validated('status'),
+        ]);
+        return redirect('/dashboard');
     }
 
     /**
