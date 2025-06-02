@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTodoRequest;
 use App\Models\Todo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 
 class TodoController extends Controller
 {
@@ -21,9 +22,9 @@ class TodoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('Todo.CreateTodoView');
     }
 
     /**
