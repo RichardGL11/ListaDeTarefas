@@ -5,6 +5,7 @@ namespace Http\Todo;
 use App\Enums\TodoStatusEnum;
 use App\Models\Todo;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -71,5 +72,40 @@ class UpdateTodoTest extends TestCase
             'description' => 'updated description',
             'status' => TodoStatusEnum::Completed,
         ]);
+    }
+
+    #[DataProvider('title_validation_provider')]
+    public function test_title_validation_rules(array $input, string $error): void
+    {
+        $user = User::factory()->create();
+        $todo = Todo::factory()->for($user)->create([
+            'title' => 'old title',
+            'description' => 'old description',
+        ]);
+        $this->actingAs($user);
+        $response = $this->put(route('todos.update', $todo), [
+            'title' => $input['title'],
+            'description' => 'todo description',
+        ]);
+
+        $response->assertSessionHasErrors(['title' => $error]);
+    }
+
+    public static function title_validation_provider(): array
+    {
+        return [
+            'missing title' => [
+                'input' => ['title' => null],
+                'error' => 'The title field is required.',
+            ],
+            'short title' => [
+                'input' => ['title' => 'aa'],
+                'error' => 'The title field must be at least 3 characters.',
+            ],
+            'long title' => [
+                'input' => ['title' => str_repeat('a', 256)],
+                'error' => 'The title field must not be greater than 255 characters.',
+            ],
+        ];
     }
 }
