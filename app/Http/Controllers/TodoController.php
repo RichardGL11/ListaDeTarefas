@@ -6,9 +6,8 @@ use App\Enums\TodoStatusEnum;
 use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
 use App\Models\Todo;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class TodoController extends Controller
 {
@@ -64,11 +63,13 @@ class TodoController extends Controller
      */
     public function update(UpdateTodoRequest $request, Todo $todo): RedirectResponse
     {
+        $this->authorize('update', $todo);
         $todo->update([
             'title' => $request->validated('title'),
             'description' => $request->validated('description'),
             'status' => $request->validated('status'),
         ]);
+
         return redirect('/dashboard');
     }
 
