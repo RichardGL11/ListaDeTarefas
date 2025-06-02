@@ -90,6 +90,41 @@ class UpdateTodoTest extends TestCase
 
         $response->assertSessionHasErrors(['title' => $error]);
     }
+    #[DataProvider('description_validation_provider')]
+    public function test_description_validation_rules(array $input, string $error): void
+    {
+        $user = User::factory()->create();
+        $todo = Todo::factory()->for($user)->create([
+            'title' => 'old title',
+            'description' => 'old description',
+        ]);
+        $this->actingAs($user);
+        $response = $this->put(route('todos.update', $todo), [
+            'title' => 'title for todo',
+            'description' => $input['description'],
+        ]);
+
+        $response->assertSessionHasErrors(['description' => $error]);
+    }
+
+    public static function description_validation_provider(): array
+    {
+        return [
+            'missing description' => [
+                'input' => ['description' => null],
+                'error' => 'The description field is required.',
+            ],
+            'short description' => [
+                'input' => ['description' => 'aa'],
+                'error' => 'The description field must be at least 3 characters.',
+            ],
+            'long description' => [
+                'input' => ['description' => str_repeat('a', 256)],
+                'error' => 'The description field must not be greater than 255 characters.',
+            ],
+        ];
+    }
+
 
     public static function title_validation_provider(): array
     {
