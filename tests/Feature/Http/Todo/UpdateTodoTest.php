@@ -106,6 +106,23 @@ class UpdateTodoTest extends TestCase
 
         $response->assertSessionHasErrors(['description' => $error]);
     }
+    #[DataProvider('status_validation_provider')]
+    public function test_status_validation_rules(array $input, string $error): void
+    {
+        $user = User::factory()->create();
+        $todo = Todo::factory()->for($user)->create([
+            'title' => 'old title',
+            'description' => 'old description',
+        ]);
+        $this->actingAs($user);
+        $response = $this->put(route('todos.update', $todo), [
+            'title' => 'title for todo',
+            'description' => 'description',
+            'status' => $input['status'],
+        ]);
+
+        $response->assertSessionHasErrors(['status' => $error]);
+    }
 
     public static function description_validation_provider(): array
     {
@@ -140,6 +157,16 @@ class UpdateTodoTest extends TestCase
             'long title' => [
                 'input' => ['title' => str_repeat('a', 256)],
                 'error' => 'The title field must not be greater than 255 characters.',
+            ],
+        ];
+    }
+
+    public static function status_validation_provider(): array
+    {
+        return [
+            'wrong status' => [
+                'input' => ['status' => 'aaa'],
+                'error' => 'The selected status is invalid.',
             ],
         ];
     }
