@@ -35,8 +35,9 @@ class TodoController extends Controller
             'title' => $request->validated('title'),
             'description' => $request->validated('description'),
             'status' => TodoStatusEnum::Pending,
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
         ]);
+
         return redirect('/dashboard', 201);
     }
 
