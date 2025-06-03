@@ -44,4 +44,31 @@ class FilterTodoTest extends TestCase
         $response->assertSeeText('Previous');
         $response->assertSeeText('Next');
     }
+
+    #[Test]
+    public function test_soft_deleted_todo(): void
+    {
+        $user = User::factory()->create();
+        $softDeletedTodo = Todo::factory(10)->for($user)->trashed()->completed()->create();
+        $pendingTodo = Todo::factory(10)->for($user)->pending()->create();
+        $this->actingAs($user);
+        $response = $this->get('/dashboard?status=PENDENTE');
+
+        $pendingTodo->each(function ($todo) use ($response) {
+            $response->assertSeeText($todo->title);
+            $response->assertSeeText(strtoupper($todo->status->value));
+            $response->assertSeeText($todo->decription);
+        });
+
+
+        $response = $this->get('/dashboard?status=EXCLUIDO');
+
+        $softDeletedTodo->each(function ($todo) use ($response) {
+            $response->assertSeeText($todo->title);
+            $response->assertSeeText(strtoupper($todo->status->value));
+            $response->assertSeeText($todo->decription);
+        });
+        $response->assertDontSeeText('PENDENTE');
+    }
+
 }
