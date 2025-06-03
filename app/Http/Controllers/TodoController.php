@@ -11,10 +11,6 @@ use Illuminate\Http\RedirectResponse;
 
 class TodoController extends Controller
 {
-    public function index()
-    {
-        //
-    }
 
     public function create(): View
     {
@@ -31,11 +27,6 @@ class TodoController extends Controller
         ]);
 
         return redirect('/dashboard', 201);
-    }
-
-    public function show(string $id)
-    {
-        //
     }
 
     public function edit(Todo $todo): View
