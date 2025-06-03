@@ -31,6 +31,16 @@ class CreateTodoTest extends TestCase
         ]);
     }
 
+    #[Test]
+    public function it_should_render_the_create_form()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $response = $this->get(route('todos.create'));
+        $response->assertSeeText('Create a Todo');
+        $response->assertSeeText('Title');
+    }
+
     #[DataProvider('title_validation_provider')]
     public function test_title_validation_rules(array $input, string $error): void
     {
