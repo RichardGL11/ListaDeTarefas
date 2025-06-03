@@ -8,7 +8,6 @@ use Illuminate\View\Component;
 
 class TodoComponent extends Component
 {
-
     public function render(): View|Closure|string
     {
         $query = auth()->user()->todos();

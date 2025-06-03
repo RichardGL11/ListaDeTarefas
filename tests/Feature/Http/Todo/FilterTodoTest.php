@@ -34,6 +34,7 @@ class FilterTodoTest extends TestCase
         });
         $response->assertDontSeeText('PENDENTE');
     }
+
     #[Test]
     public function test_pagination(): void
     {
@@ -60,7 +61,6 @@ class FilterTodoTest extends TestCase
             $response->assertSeeText($todo->decription);
         });
 
-
         $response = $this->get('/dashboard?status=EXCLUIDO');
 
         $softDeletedTodo->each(function ($todo) use ($response) {
@@ -84,10 +84,9 @@ class FilterTodoTest extends TestCase
         $response->assertSee(strtoupper($todoThatWillBeRestored->status->value));
 
         $response->assertDontSeeText('PENDENTE');
-        $this->post(route('todos.restore',$todoThatWillBeRestored->id));
+        $this->post(route('todos.restore', $todoThatWillBeRestored->id));
         $this->assertNotSoftDeleted($todoThatWillBeRestored);
         $response = $this->get('/dashboard?status=EXCLUIDO');
         $response->assertdontSeeText($todoThatWillBeRestored->description);
     }
-
 }

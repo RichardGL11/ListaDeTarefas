@@ -26,5 +26,4 @@ class TodoPolicy
     {
         return $user->id === $todo->user->id;
     }
-
 }

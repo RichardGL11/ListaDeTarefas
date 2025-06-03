@@ -15,7 +15,7 @@ class RestoreTodoTest extends TestCase
         $user = User::factory()->create();
         $todo = Todo::factory()->for($user)->trashed()->createOne();
         $this->actingAs($user);
-        $response = $this->post(route('todos.restore',$todo->id));
+        $response = $this->post(route('todos.restore', $todo->id));
         $response->assertRedirect('/dashboard');
         $todo->fresh();
         $this->assertNotSoftDeleted($todo);
@@ -28,7 +28,7 @@ class RestoreTodoTest extends TestCase
         $wrongUser = User::factory()->create();
         $todo = Todo::factory()->for($user)->trashed()->createOne();
         $this->actingAs($wrongUser);
-        $response = $this->post(route('todos.restore',$todo->id));
+        $response = $this->post(route('todos.restore', $todo->id));
         $response->assertStatus(403);
         $todo->fresh();
         $this->assertSoftDeleted($todo);

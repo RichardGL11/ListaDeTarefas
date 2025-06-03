@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 
 class TodoController extends Controller
 {
-
     public function create(): View
     {
         return view('Todo.CreateTodoView');

@@ -12,6 +12,7 @@ class RestoreTodoController extends Controller
         $todo = Todo::onlyTrashed()->where('id', $id)->firstOrFail();
         $this->authorize('restore', $todo);
         $todo->restore();
+
         return redirect('/dashboard');
     }
 }
