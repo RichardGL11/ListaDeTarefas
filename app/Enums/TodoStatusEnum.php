@@ -5,5 +5,5 @@ namespace App\Enums;
 enum TodoStatusEnum: string
 {
     case Pending = 'pendente';
-    case Completed = 'completed';
+    case Completed = 'concluido';
 }

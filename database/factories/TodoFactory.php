@@ -20,7 +20,7 @@ class TodoFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(),
-            'description' => $this->faker->paragraph(),
+            'description' => $this->faker->text(),
             'status' => $this->faker->randomElement(TodoStatusEnum::cases()),
             'user_id' => User::factory(),
         ];
