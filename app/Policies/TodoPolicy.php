@@ -19,7 +19,7 @@ class TodoPolicy
 
     public function delete(User $user, Todo $todo): bool
     {
-        return false;
+        return $user->id === $todo->user->id;
     }
 
     public function restore(User $user, Todo $todo): bool

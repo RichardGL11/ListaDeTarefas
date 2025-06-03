@@ -60,8 +60,10 @@ class TodoController extends Controller
         return redirect('/dashboard');
     }
 
-    public function destroy(string $id)
+    public function destroy(Todo $todo): RedirectResponse
     {
-        //
+        $this->authorize('delete',$todo);
+        $todo->delete();
+        return redirect('/dashboard');
     }
 }
