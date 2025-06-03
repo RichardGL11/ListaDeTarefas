@@ -40,6 +40,8 @@ class TodoController extends Controller
 
     public function edit(Todo $todo): View
     {
+        $this->authorize('edit', $todo);
+
         return view('Todo.EditTodoView', [
             'todo' => $todo,
             'status' => TodoStatusEnum::cases(),
