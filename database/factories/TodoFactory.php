@@ -25,4 +25,18 @@ class TodoFactory extends Factory
             'user_id' => User::factory(),
         ];
     }
+
+    public function completed(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => TodoStatusEnum::Completed->value,
+        ]);
+    }
+
+    public function pending(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => TodoStatusEnum::Pending->value,
+        ]);
+    }
 }
