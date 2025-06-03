@@ -13,8 +13,12 @@ class TodoComponent extends Component
     {
         $query = auth()->user()->todos();
 
-        if (request()->has('status') && in_array(request('status'), ['PENDENTE', 'CONCLUIDO'])) {
-            $query->where('status', request('status'));
+        $status = request('status');
+
+        if ($status === 'EXCLUIDO') {
+            $query = $query->onlyTrashed();
+        } elseif (in_array($status, ['PENDENTE', 'CONCLUIDO'])) {
+            $query->where('status', $status);
         }
 
         return view('components.todo-component', [

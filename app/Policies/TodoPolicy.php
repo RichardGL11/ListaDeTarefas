@@ -24,14 +24,7 @@ class TodoPolicy
 
     public function restore(User $user, Todo $todo): bool
     {
-        return false;
+        return $user->id === $todo->user->id;
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Todo $todo): bool
-    {
-        return false;
-    }
 }
