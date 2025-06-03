@@ -9,14 +9,13 @@ use Tests\TestCase;
 
 class DeleteTodoTest extends TestCase
 {
-
     #[Test]
     public function it_should_be_able_to_soft_delete_a_todo()
     {
         $user = User::factory()->create();
         $todo = Todo::factory()->for($user)->create([
             'title' => 'title',
-            'description' => 'todo that will be soft deleted'
+            'description' => 'todo that will be soft deleted',
         ]);
         $this->actingAs($user);
 
@@ -27,9 +26,10 @@ class DeleteTodoTest extends TestCase
 
         $this->assertDatabaseHas(Todo::class, [
             'title' => 'title',
-            'description' => 'todo that will be soft deleted'
+            'description' => 'todo that will be soft deleted',
         ]);
     }
+
     #[Test]
     public function test_only_the_owner_can_soft_delete_the_todo()
     {
@@ -37,7 +37,7 @@ class DeleteTodoTest extends TestCase
         $wrongUser = User::factory()->create();
         $todo = Todo::factory()->for($user)->create([
             'title' => 'title',
-            'description' => 'todo that will be soft deleted'
+            'description' => 'todo that will be soft deleted',
         ]);
         $this->actingAs($wrongUser);
 

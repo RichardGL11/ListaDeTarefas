@@ -90,6 +90,7 @@ class UpdateTodoTest extends TestCase
 
         $response->assertSessionHasErrors(['title' => $error]);
     }
+
     #[DataProvider('description_validation_provider')]
     public function test_description_validation_rules(array $input, string $error): void
     {
@@ -106,6 +107,7 @@ class UpdateTodoTest extends TestCase
 
         $response->assertSessionHasErrors(['description' => $error]);
     }
+
     #[DataProvider('status_validation_provider')]
     public function test_status_validation_rules(array $input, string $error): void
     {
@@ -141,7 +143,6 @@ class UpdateTodoTest extends TestCase
             ],
         ];
     }
-
 
     public static function title_validation_provider(): array
     {

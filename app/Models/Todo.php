@@ -13,6 +13,7 @@ class Todo extends Model
 {
     /** @use HasFactory<TodoFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     protected $fillable = ['title', 'description', 'status', 'user_id'];

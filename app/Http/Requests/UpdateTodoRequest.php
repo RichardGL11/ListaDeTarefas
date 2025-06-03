@@ -26,7 +26,7 @@ class UpdateTodoRequest extends FormRequest
         return [
             'title' => 'required|min:3|max:255',
             'description' => 'required|min:3|max:255',
-            'status' => ['required', Rule::enum(TodoStatusEnum::class)]
+            'status' => ['required', Rule::enum(TodoStatusEnum::class)],
         ];
     }
 }
