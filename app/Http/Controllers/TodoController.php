@@ -11,25 +11,16 @@ use Illuminate\Http\RedirectResponse;
 
 class TodoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(): View
     {
         return view('Todo.CreateTodoView');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreTodoRequest $request): RedirectResponse
     {
         Todo::query()->create([
@@ -42,25 +33,19 @@ class TodoController extends Controller
         return redirect('/dashboard', 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Todo $todo): View
     {
-        //
+        return view('Todo.EditTodoView', [
+            'todo' => $todo,
+            'status' => TodoStatusEnum::cases(),
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateTodoRequest $request, Todo $todo): RedirectResponse
     {
         $this->authorize('update', $todo);
@@ -73,9 +58,6 @@ class TodoController extends Controller
         return redirect('/dashboard');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //
