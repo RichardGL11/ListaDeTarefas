@@ -20,4 +20,17 @@ class RestoreTodoTest extends TestCase
         $todo->fresh();
         $this->assertNotSoftDeleted($todo);
     }
+
+    #[Test]
+    public function test_only_the_owner_can_restore_the_todo()
+    {
+        $user = User::factory()->create();
+        $wrongUser = User::factory()->create();
+        $todo = Todo::factory()->for($user)->trashed()->createOne();
+        $this->actingAs($wrongUser);
+        $response = $this->post(route('todos.restore',$todo->id));
+        $response->assertStatus(403);
+        $todo->fresh();
+        $this->assertSoftDeleted($todo);
+    }
 }
