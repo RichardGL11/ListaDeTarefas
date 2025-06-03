@@ -71,4 +71,23 @@ class FilterTodoTest extends TestCase
         $response->assertDontSeeText('PENDENTE');
     }
 
+    #[Test]
+    public function test_after_soft_deleted_todo_cant_see_on_the_filter_page(): void
+    {
+        $user = User::factory()->create();
+        $todoThatWillBeRestored = Todo::factory()->for($user)->trashed()->completed()->createOne();
+        $this->actingAs($user);
+
+        $response = $this->get('/dashboard?status=EXCLUIDO');
+        $response->assertSee($todoThatWillBeRestored->title);
+        $response->assertSee($todoThatWillBeRestored->description);
+        $response->assertSee(strtoupper($todoThatWillBeRestored->status->value));
+
+        $response->assertDontSeeText('PENDENTE');
+        $this->post(route('todos.restore',$todoThatWillBeRestored->id));
+        $this->assertNotSoftDeleted($todoThatWillBeRestored);
+        $response = $this->get('/dashboard?status=EXCLUIDO');
+        $response->assertdontSeeText($todoThatWillBeRestored->description);
+    }
+
 }
